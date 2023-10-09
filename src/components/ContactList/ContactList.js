@@ -1,13 +1,13 @@
 import React from 'react';
 import css from './ContactList.module.css';
-import { deleteContact } from '../../redux/contactsSlice';
+import { deleteContact } from '../../redux/contactsOperations';
 import { useDispatch, useSelector } from 'react-redux';
-import { getContacts } from '../../redux/selectors';
-import { getFilterContact } from '../../redux/selectors';
+import { selectContacts } from '../../redux/selectors';
+import { selectFilterContact } from '../../redux/selectors';
 
 const ContactList = () => {
-  const contacts = useSelector(getContacts);
-  const filterValue = useSelector(getFilterContact).toLowerCase();
+  const contacts = useSelector(selectContacts);
+  const filterValue = useSelector(selectFilterContact).toLowerCase();
   const dispatch = useDispatch();
 
   const handleDelete = event => {
@@ -26,23 +26,27 @@ const ContactList = () => {
   const visibleContacts = getVisibleContacts();
 
   return (
-    <ul className={css.contactList}>
-      {visibleContacts.map(({ id, name, number }) => (
-        <li key={id} className={css.contactList_item}>
-          <p>
-            {name} {number}
-          </p>
-          <button
-            type="button"
-            className={css.btn}
-            id={id}
-            onClick={handleDelete}
-          >
-            Delete
-          </button>
-        </li>
-      ))}
-    </ul>
+    <>
+      {contacts && (
+        <ul className={css.contactList}>
+          {visibleContacts.map(({ id, name, phone }) => (
+            <li key={id} className={css.contactList_item}>
+              <p>
+                {name} {phone}
+              </p>
+              <button
+                type="button"
+                className={css.btn}
+                id={id}
+                onClick={handleDelete}
+              >
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
   );
 };
 
